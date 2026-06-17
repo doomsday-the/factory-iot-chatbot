@@ -47,14 +47,19 @@ Streamlit UI (Answer)
    GEMINI_API_KEY=your_gemini_api_key
    ```
 
-3. Run the Backend (FastAPI):
-   Navigate to the `backend` directory or run from root:
+3. Run the Application:
+   You can easily start both the FastAPI backend and Streamlit frontend using the provided run script:
    ```bash
-   python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+   python run.py
    ```
+   *This will automatically launch the backend on port 8000 and the frontend on port 8501.*
 
-4. Run the Frontend (Streamlit):
+   Alternatively, you can run them separately:
    ```bash
+   # Terminal 1: Backend
+   python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+   # Terminal 2: Frontend
    streamlit run frontend/app.py
    ```
 

@@ -21,7 +21,7 @@ def get_connection():
     )
 
 def inspect_schemas():
-    views = ["welding_dashboard", "gascutting_dashboard", "deviation_dashboard", "clad_dashboard"]
+    views = ["welding_dashboard", "gascutting_dashboard", "deviation_dashboard", "clad_dashboard", "machines"]
     schemas = {}
     conn = get_connection()
     try:

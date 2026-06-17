@@ -33,6 +33,10 @@ Columns: hardware_id, machine_name, machine_type, operator_id, shift_id, shift_n
 
 4. clad_dashboard
 Columns: business_date, shift_name, machine_name, machine_type, avg_weld_current, avg_weld_voltage, loss_in_kg, time_spent_minutes
+
+5. machines
+Columns: mid, name, hardware_id, des, msid, mtid, hid, orgid, mcsid, mcid, rpm_multiplication_factor, notify, deleted, created_at, updated_at
+Note on mtid (it is a TEXT type, always use quotes): '1' = welding, '2' = cladding, '3' = gas cutting
 """
 
 MODEL = "gemini-2.5-flash"
@@ -63,8 +67,8 @@ def generate_sql(question: str) -> str:
 
 CRITICAL RULES:
 - Write ONE single PostgreSQL SELECT query for the user's question.
-- You MUST ONLY query the views listed above. Do not query any other table or view (e.g. do not use 'users', 'machines', 'welding').
-- If asked to list all machines, combine the machine lists from welding_dashboard, gascutting_dashboard, and clad_dashboard. Do NOT include deviation_dashboard for listing machines, as it only contains machines with errors.
+- You MUST ONLY query the views listed above. Do not query any other table or view (e.g. do not use 'users', 'welding').
+- If asked to list all machines or any operation regarding all the machines, use the 'machines' table. Do NOT combine from other dashboards for this purpose.
 - Output ONLY the raw SQL query. No explanations, no markdown formatting.
 
 Question: {question}
@@ -81,10 +85,10 @@ Question: {question}
 
 def generate_friendly_answer(question: str, sql: str, results: list) -> str:
     # Limit row count sent to LLM to prevent token explosion
-    truncated = results[:15]
+    truncated = results[:100]
     result_str = str(truncated)
-    if len(results) > 15:
-        result_str += "\n(Showing top 15 results)"
+    if len(results) > 100:
+        result_str += "\n(Showing top 100 results)"
 
     prompt = f"""
 Given the user's question, the SQL query used, and the data results, provide a clear, business-friendly answer.
